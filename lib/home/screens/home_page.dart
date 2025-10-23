@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../auth/screens/auth_page.dart';
+import 'package:openstock/auth/screens/auth_page.dart';
 
 import '../../watchlist/screens/watchlist_screen.dart';
 

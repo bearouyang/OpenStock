@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'models/stock_data.dart';
+import '../models/stock_data.dart';
 
 class StockRepository {
   final SupabaseClient _client = Supabase.instance.client;
@@ -13,18 +13,17 @@ class StockRepository {
         body: {'symbol': symbol.toUpperCase()},
       );
 
-      if (response.error != null) {
-        throw Exception('Failed to invoke edge function: ${response.error!.message}');
-      }
-
       // Check if Finnhub returned an empty object (symbol not found)
       if (response.data['ticker'] == null) {
         throw Exception('Stock symbol not found.');
       }
 
       return StockData.fromMap(response.data);
+    } on FunctionException catch (e) {
+      // Handle Functions exceptions, which can provide more specific details
+      throw Exception('Failed to invoke edge function: ${e.message}');
     } catch (e) {
-      // Re-throw the exception to be caught by the provider
+      // Re-throw any other exceptions to be caught by the provider
       rethrow;
     }
   }
